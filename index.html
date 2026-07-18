@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClearPay — Invoicing and books that make sense, from Riska's Finance</title>
+<meta name="description" content="ClearPay is invoicing, quotes, and reporting built by Accountants — for the contractors and service businesses they work with every day.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B1F17;
+    --forest:#0F3D2E;
+    --forest-deep:#082018;
+    --emerald:#17B26A;
+    --emerald-dim:#0F8A52;
+    --emerald-soft:#E4F5EC;
+    --paper:#F6F7F3;
+    --mist:#EBEFE9;
+    --amber:#DE9A3C;
+    --line:#DCE3DB;
+    --line-dark:#1C4A38;
+    --white:#FFFFFF;
+    --shadow: 0 1px 2px rgba(11,31,23,0.04), 0 12px 32px -12px rgba(11,31,23,0.18);
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  }
+
+  body{
+    font-family:'IBM Plex Sans', sans-serif;
+    color:var(--ink);
+    background:var(--paper);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  h1,h2,h3,h4{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    line-height:1.08;
+    letter-spacing:-0.01em;
+    color:var(--forest-deep);
+  }
+
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--emerald-dim);
+    font-weight:500;
+  }
+  .eyebrow::before{
+    content:"";
+    width:16px; height:1.5px;
+    background:var(--emerald);
+    display:inline-block;
+  }
+
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+
+  /* ---------- Buttons ---------- */
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:13px 24px;
+    border-radius:8px;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    border:1px solid transparent;
+    transition:transform .15s ease, box-shadow .15s ease, background .15s ease, border-color .15s ease;
+    white-space:nowrap;
+  }
+  .btn:focus-visible{ outline:2px solid var(--emerald); outline-offset:3px; }
+  .btn-primary{
+    background:var(--forest-deep);
+    color:var(--white);
+  }
+  .btn-primary:hover{ background:var(--forest); transform:translateY(-1px); box-shadow:0 8px 20px -8px rgba(8,32,24,0.45);}
+  .btn-ghost{
+    background:transparent;
+    color:var(--forest-deep);
+    border-color:var(--line-dark);
+    border-color:#C9D3C7;
+  }
+  .btn-ghost:hover{ border-color:var(--forest-deep); }
+  .btn-on-dark{
+    background:var(--emerald);
+    color:var(--forest-deep);
+  }
+  .btn-on-dark:hover{ background:#22c67a; transform:translateY(-1px);}
+  .btn-ghost-dark{
+    background:transparent;
+    color:var(--white);
+    border-color:rgba(255,255,255,0.28);
+  }
+  .btn-ghost-dark:hover{ border-color:rgba(255,255,255,0.7); }
+
+  /* ---------- Header ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(246,247,243,0.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 32px;
+    max-width:1180px; margin:0 auto;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; }
+  .brand-mark{
+    width:32px; height:32px; border-radius:8px;
+    background:var(--forest-deep);
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .brand-name{ font-family:'Fraunces', serif; font-size:19px; font-weight:600; color:var(--forest-deep); letter-spacing:-0.01em;}
+  .brand-name span{ color:var(--emerald-dim); }
+  .brand-sub{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase;
+    color:#5B7A6C; margin-top:-1px;
+  }
+  .nav-links{ display:flex; align-items:center; gap:34px; }
+  .nav-links a{
+    font-size:14.5px; font-weight:500; color:#33473E;
+    position:relative; padding:4px 0;
+  }
+  .nav-links a::after{
+    content:""; position:absolute; left:0; right:0; bottom:0; height:1.5px;
+    background:var(--emerald); transform:scaleX(0); transform-origin:left;
+    transition:transform .2s ease;
+  }
+  .nav-links a:hover::after{ transform:scaleX(1); }
+  .nav-cta{ display:flex; align-items:center; gap:12px; }
+  .nav-links, .nav-cta .btn-ghost{ display:flex; }
+  @media (max-width: 860px){
+    .nav-links{ display:none; }
+    .nav-cta .btn-ghost{ display:none; }
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    padding:88px 0 60px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.05fr 1fr;
+    gap:56px;
+    align-items:center;
+  }
+  .hero h1{
+    font-size:clamp(38px, 4.6vw, 58px);
+    margin-top:18px;
+  }
+  .hero h1 em{
+    font-style:italic; color:var(--emerald-dim);
+  }
+  .hero p.lede{
+    font-size:18px; color:#3E5449; max-width:480px;
+    margin-top:20px; line-height:1.6;
+  }
+  .hero-actions{ display:flex; gap:14px; margin-top:32px; flex-wrap:wrap; }
+  .hero-trust{
+    display:flex; align-items:center; gap:14px;
+    margin-top:36px; font-size:13px; color:#5B7A6C;
+  }
+  .hero-trust .avatars{ display:flex; }
+  .hero-trust .avatars span{
+    width:26px; height:26px; border-radius:50%;
+    border:2px solid var(--paper);
+    background:var(--emerald-soft);
+    color:var(--emerald-dim);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'IBM Plex Mono', monospace; font-size:10px; font-weight:500;
+    margin-left:-8px;
+  }
+  .hero-trust .avatars span:first-child{ margin-left:0; }
+
+  /* ---- hero mockup card (recreated product UI) ---- */
+  .mockup{
+    background:var(--white);
+    border-radius:16px;
+    border:1px solid var(--line);
+    box-shadow:var(--shadow);
+    overflow:hidden;
+    transform:rotate(0.4deg);
+  }
+  .mockup-bar{
+    background:var(--forest-deep);
+    padding:12px 18px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .mockup-bar .dots{ display:flex; gap:6px; }
+  .mockup-bar .dots span{ width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,0.28); }
+  .mockup-bar .label{
+    font-family:'IBM Plex Mono', monospace; font-size:11px; color:rgba(255,255,255,0.55); letter-spacing:0.06em;
+  }
+  .mockup-body{ padding:24px; }
+  .mockup-greeting{ font-size:12.5px; color:#5B7A6C; margin-bottom:2px;}
+  .mockup-title{ font-family:'Fraunces', serif; font-size:20px; font-weight:500; color:var(--forest-deep); margin-bottom:18px;}
+  .stat-row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:18px;}
+  .stat-card{
+    background:var(--mist); border-radius:10px; padding:14px;
+  }
+  .stat-card .stat-label{ font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:0.08em; text-transform:uppercase; color:#5B7A6C; }
+  .stat-card .stat-value{ font-family:'Fraunces', serif; font-size:22px; font-weight:600; color:var(--forest-deep); margin-top:4px;}
+  .stat-card.up .stat-value{ color:var(--emerald-dim); }
+  .invoice-list{ border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+  .invoice-row{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:11px 14px; font-size:13px;
+    border-bottom:1px solid var(--line);
+  }
+  .invoice-row:last-child{ border-bottom:none; }
+  .invoice-row .who{ font-weight:500; color:var(--forest-deep);}
+  .invoice-row .amt{ font-family:'IBM Plex Mono', monospace; color:#3E5449; }
+  .pill{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10px; padding:3px 8px; border-radius:20px; font-weight:500;
+  }
+  .pill.paid{ background:var(--emerald-soft); color:var(--emerald-dim); }
+  .pill.due{ background:#FBEBD3; color:#95661C; }
+
+  /* ---------- Trusted-by strip ---------- */
+  .trusted{
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    background:var(--mist);
+    padding:26px 0;
+  }
+  .trusted .wrap{ display:flex; align-items:center; gap:36px; flex-wrap:wrap; }
+  .trusted .tlabel{ font-family:'IBM Plex Mono', monospace; font-size:11.5px; letter-spacing:0.08em; text-transform:uppercase; color:#5B7A6C; flex-shrink:0;}
+  .trusted .names{ display:flex; gap:34px; flex-wrap:wrap; }
+  .trusted .names span{ font-family:'Fraunces', serif; font-size:16px; color:#33473E; opacity:0.75; }
+
+  /* ---------- Signature: receipts to clarity ---------- */
+  .scene{
+    padding:120px 0 110px;
+  }
+  .scene-head{ max-width:600px; margin-bottom:64px; }
+  .scene-head h2{ font-size:clamp(30px,3.4vw,42px); margin-top:14px; }
+  .scene-head p{ font-size:17px; color:#3E5449; margin-top:16px; }
+
+  .scene-stage{
+    display:grid;
+    grid-template-columns:1fr 74px 1fr;
+    align-items:center;
+    gap:0;
+  }
+  .chaos{
+    position:relative;
+    height:300px;
+  }
+  .chaos-note{
+    position:absolute;
+    width:118px; height:80px;
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:6px;
+    box-shadow:0 6px 16px -6px rgba(11,31,23,0.15);
+    padding:10px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:9px;
+    color:#8AA098;
+    opacity:0;
+    transform:translateY(14px) rotate(var(--r,0deg));
+    transition:opacity .6s ease, transform .6s ease;
+    transition-delay:var(--d, 0s);
+  }
+  .chaos-note .line{ height:5px; background:var(--mist); border-radius:2px; margin-bottom:6px;}
+  .chaos-note .line.short{ width:55%;}
+  .scene.is-visible .chaos-note{ opacity:1; transform:translateY(0) rotate(var(--r,0deg)); }
+
+  .arrow-mid{
+    display:flex; align-items:center; justify-content:center;
+    color:var(--emerald);
+    opacity:0; transform:scale(0.7);
+    transition:opacity .5s ease .5s, transform .5s ease .5s;
+  }
+  .scene.is-visible .arrow-mid{ opacity:1; transform:scale(1); }
+
+  .clarity-card{
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    padding:22px;
+    opacity:0;
+    transform:translateY(18px);
+    transition:opacity .7s ease .35s, transform .7s ease .35s;
+  }
+  .scene.is-visible .clarity-card{ opacity:1; transform:translateY(0); }
+  .clarity-card .ch{ display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;}
+  .clarity-card .ch .badge{
+    width:30px; height:30px; border-radius:8px; background:var(--emerald-soft);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .clarity-card .name{ font-family:'Fraunces', serif; font-weight:500; font-size:16px; color:var(--forest-deep);}
+  .clarity-card .co{ font-size:12px; color:#5B7A6C; }
+  .clarity-line{ display:flex; justify-content:space-between; font-size:13px; padding:9px 0; border-bottom:1px dashed var(--line);}
+  .clarity-line:last-of-type{ border-bottom:none;}
+  .clarity-total{ display:flex; justify-content:space-between; margin-top:14px; padding-top:14px; border-top:1px solid var(--line);}
+  .clarity-total .tl{ font-family:'Fraunces', serif; font-weight:500; color:var(--forest-deep);}
+  .clarity-total .tv{ font-family:'IBM Plex Mono', monospace; font-weight:500; color:var(--emerald-dim); font-size:17px;}
+
+  @media (max-width: 860px){
+    .scene-stage{ grid-template-columns:1fr; gap:28px;}
+    .arrow-mid{ transform:rotate(90deg) scale(0.7); }
+    .scene.is-visible .arrow-mid{ transform:rotate(90deg) scale(1); }
+    .chaos{ height:220px; }
+  }
+
+  /* ---------- Features ---------- */
+  .features{ background:var(--forest-deep); padding:110px 0; color:var(--white); }
+  .features .scene-head h2, .features .scene-head p{ color:var(--white); }
+  .features .scene-head p{ color:rgba(255,255,255,0.68); }
+  .feature-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:1px;
+    background:rgba(255,255,255,0.1);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:16px;
+    overflow:hidden;
+  }
+  .feature{
+    background:var(--forest);
+    padding:32px 28px;
+    transition:background .2s ease;
+  }
+  .feature:hover{ background:#12463A; }
+  .feature .fnum{ font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--emerald); letter-spacing:0.08em;}
+  .feature h3{ color:var(--white); font-size:19px; margin-top:14px; margin-bottom:10px; font-weight:500;}
+  .feature p{ font-size:14px; color:rgba(255,255,255,0.62); line-height:1.6; }
+  @media (max-width: 860px){ .feature-grid{ grid-template-columns:1fr; } }
+
+  /* ---------- How it works ---------- */
+  .steps{ padding:110px 0; }
+  .step-row{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:40px; margin-top:56px;
+  }
+  .step{ position:relative; padding-top:26px; border-top:1px solid var(--line-dark); border-top-color:#C9D3C7; }
+  .step .snum{ font-family:'Fraunces', serif; font-style:italic; font-size:15px; color:var(--emerald-dim); }
+  .step h3{ font-size:21px; margin-top:12px; margin-bottom:10px; font-weight:500; }
+  .step p{ font-size:14.5px; color:#3E5449; line-height:1.65;}
+  @media (max-width: 860px){ .step-row{ grid-template-columns:1fr; gap:32px;} }
+
+  /* ---------- Security ---------- */
+  .security{
+    background:var(--emerald-soft);
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    padding:56px 0;
+  }
+  .security .wrap{ display:flex; align-items:center; gap:28px; }
+  .security-icon{
+    width:52px; height:52px; border-radius:12px; background:var(--forest-deep);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .security h3{ font-size:19px; margin-bottom:6px; }
+  .security p{ font-size:14.5px; color:#33473E; max-width:640px; }
+
+  /* ---------- CTA ---------- */
+  .cta{
+    background:var(--forest-deep);
+    padding:110px 0;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .cta::before{
+    content:"";
+    position:absolute; inset:0;
+    background:radial-gradient(600px 260px at 50% 0%, rgba(23,177,106,0.16), transparent 70%);
+  }
+  .cta-inner{ position:relative; max-width:600px; margin:0 auto; }
+  .cta h2{ color:var(--white); font-size:clamp(30px,3.6vw,44px);}
+  .cta p{ color:rgba(255,255,255,0.68); font-size:17px; margin-top:16px;}
+  .cta-actions{ display:flex; gap:14px; justify-content:center; margin-top:34px; flex-wrap:wrap;}
+
+  /* ---------- Footer ---------- */
+  footer{ background:var(--forest-deep); border-top:1px solid rgba(255,255,255,0.08); padding:56px 0 30px;}
+  .foot-grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:40px; }
+  .foot-brand .brand-name{ color:var(--white); }
+  .foot-brand p{ color:rgba(255,255,255,0.5); font-size:13.5px; margin-top:14px; max-width:260px; line-height:1.6;}
+  .foot-col h4{ font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:rgba(255,255,255,0.45); font-weight:500; margin-bottom:14px;}
+  .foot-col a{ display:block; font-size:14px; color:rgba(255,255,255,0.72); margin-bottom:11px; transition:color .15s ease;}
+  .foot-col a:hover{ color:var(--emerald); }
+  .foot-bottom{
+    display:flex; justify-content:space-between; align-items:center;
+    margin-top:56px; padding-top:24px; border-top:1px solid rgba(255,255,255,0.08);
+    font-size:12.5px; color:rgba(255,255,255,0.4); flex-wrap:wrap; gap:10px;
+  }
+  @media (max-width: 860px){ .foot-grid{ grid-template-columns:1fr 1fr; } }
+
+  /* ---------- reveal utility ---------- */
+  .reveal{ opacity:0; transform:translateY(16px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal.is-visible{ opacity:1; transform:translateY(0); }
+
+  @media (max-width: 860px){
+    .hero-grid{ grid-template-columns:1fr; }
+    .mockup{ transform:none; }
+    .wrap{ padding:0 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 12.5L9.5 18L20 6" stroke="#17B26A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div>
+        <div class="brand-name">Clear<span>Pay</span></div>
+        <div class="brand-sub">by Riska's Finance</div>
+      </div>
+    </div>
+    <nav class="nav-links">
+      <a href="#features">Product</a>
+      <a href="#clarity">How it works</a>
+      <a href="#process">Process</a>
+      <a href="#security">Security</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="https://clearpay.riskasfinance.com/" class="btn btn-ghost" target="_blank" rel="noopener noreferrer">Sign in</a>
+      <a href="https://clearpay.riskasfinance.com/" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Get started</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Invoicing &amp; books, in one place</span>
+      <h1>Know exactly<br>where your money<br><em>stands.</em></h1>
+      <p class="lede">ClearPay is invoicing, quotes, and reporting built by working Accountants — for the contractors, landscapers, and service businesses they close the books for every month.</p>
+      <div class="hero-actions">
+        <a href="https://clearpay.riskasfinance.com/" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Get started free</a>
+        <a href="#clarity" class="btn btn-ghost">See how it works</a>
+      </div>
+      <div class="hero-trust">
+        <div class="avatars">
+          <span>AR</span><span>RL</span><span>MQ</span><span>TF</span>
+        </div>
+        <span>Trusted by service businesses across Illinois</span>
+      </div>
+    </div>
+
+    <div class="mockup" aria-hidden="true">
+      <div class="mockup-bar">
+        <div class="dots"><span></span><span></span><span></span></div>
+        <div class="label">clearpay.riskasfinance.com</div>
+      </div>
+      <div class="mockup-body">
+        <div class="mockup-greeting">Good evening</div>
+        <div class="mockup-title">Here's where things stand</div>
+        <div class="stat-row">
+          <div class="stat-card up">
+            <div class="stat-label">Total Revenue</div>
+            <div class="stat-value">$1,500</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Outstanding</div>
+            <div class="stat-value">$512</div>
+          </div>
+        </div>
+        <div class="invoice-list">
+          <div class="invoice-row">
+            <span class="who">ABC Company, LLC</span>
+            <span><span class="amt">$512.00</span> <span class="pill due">Due soon</span></span>
+          </div>
+          <div class="invoice-row">
+            <span class="who">Construction Company, Inc</span>
+            <span><span class="amt">$550.00</span> <span class="pill paid">Paid</span></span>
+          </div>
+          <div class="invoice-row">
+            <span class="who">XYZ Company, Inc</span>
+            <span><span class="amt">$350.00</span> <span class="pill paid">Paid</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="trusted">
+  <div class="wrap">
+    <span class="tlabel">Built alongside businesses like</span>
+    <div class="names">
+      <span>Lee's Pro Transport</span>
+      <span>Sauk Valley Lawn &amp; Landscaping</span>
+      <span>T&amp;T Concrete &amp; Landscape</span>
+      <span>Tint Wood, LLC</span>
+    </div>
+  </div>
+</div>
+
+<section class="scene" id="clarity">
+  <div class="wrap">
+    <div class="scene-head reveal">
+      <span class="eyebrow">The problem we built this for</span>
+      <h2>From a shoebox of receipts to one clear invoice.</h2>
+      <p>Most owners we work with aren't behind because they're careless — they're behind because tracking money by hand doesn't scale. ClearPay takes the scattered version of your books and turns it into something you can read at a glance.</p>
+    </div>
+
+    <div class="scene-stage">
+      <div class="chaos">
+        <div class="chaos-note" style="top:6%; left:8%; --r:-7deg; --d:0s;">
+          <div class="line short"></div><div class="line"></div><div class="line" style="width:70%"></div>
+        </div>
+        <div class="chaos-note" style="top:32%; left:38%; --r:5deg; --d:0.1s;">
+          <div class="line" style="width:80%"></div><div class="line short"></div>
+        </div>
+        <div class="chaos-note" style="top:12%; left:58%; --r:-3deg; --d:0.2s;">
+          <div class="line" style="width:60%"></div><div class="line"></div><div class="line short"></div>
+        </div>
+        <div class="chaos-note" style="top:52%; left:14%; --r:4deg; --d:0.3s;">
+          <div class="line short"></div><div class="line" style="width:75%"></div>
+        </div>
+        <div class="chaos-note" style="top:60%; left:52%; --r:-6deg; --d:0.4s;">
+          <div class="line" style="width:65%"></div><div class="line"></div>
+        </div>
+      </div>
+
+      <div class="arrow-mid">
+        <svg width="40" height="24" viewBox="0 0 40 24" fill="none"><path d="M0 12H38M38 12L27 1M38 12L27 23" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+
+      <div class="clarity-card">
+        <div class="ch">
+          <div>
+            <div class="name">Invoice INV-006</div>
+            <div class="co">ABC Company, LLC</div>
+          </div>
+          <div class="badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 12.5L9.5 18L20 6" stroke="#17B26A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+        <div class="clarity-line"><span>Site cleanup — 3 crews</span><span class="mono">$480.00</span></div>
+        <div class="clarity-line"><span>Apply tax (0%)</span><span class="mono">$0.00</span></div>
+        <div class="clarity-line"><span>Card processing fee</span><span class="mono">$32.00</span></div>
+        <div class="clarity-total"><span class="tl">Grand total</span><span class="tv">$512.00</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features" id="features">
+  <div class="wrap">
+    <div class="scene-head reveal">
+      <span class="eyebrow" style="color:var(--emerald)">Everything the books need</span>
+      <h2>One dashboard, not five spreadsheets.</h2>
+      <p>Invoicing, quotes, clients, and reporting — connected, so nothing has to be re-typed twice.</p>
+    </div>
+    <div class="feature-grid">
+      <div class="feature">
+        <div class="fnum">Invoicing</div>
+        <h3>Invoices clients actually pay</h3>
+        <p>Build a line-item invoice in under a minute, apply tax or a card fee with a checkbox, and send it as a clean PDF or by email.</p>
+      </div>
+      <div class="feature">
+        <div class="fnum">Quotes</div>
+        <h3>Estimates that become invoices</h3>
+        <p>Send a quote, get it approved, and convert it straight into an invoice — no retyping line items or amounts.</p>
+      </div>
+      <div class="feature">
+        <div class="fnum">Clients</div>
+        <h3>One directory for every client</h3>
+        <p>Every job site, contact, and company in a searchable directory, linked to every quote and invoice tied to them.</p>
+      </div>
+      <div class="feature">
+        <div class="fnum">Chart of Accounts</div>
+        <h3>Consistent categories on every invoice</h3>
+        <p>Set up the categories you bill under once, then pick from the same list every time you build a quote or invoice - no retyping, no inconsistent naming.</p>
+      </div>
+      <div class="feature">
+        <div class="fnum">Reports</div>
+        <h3>Cash flow, at a glance</h3>
+        <p>See total received, total outstanding, and what's overdue, broken down without exporting a single spreadsheet.</p>
+      </div>
+      <div class="feature">
+        <div class="fnum">Payments</div>
+        <h3>Get paid by card, directly</h3>
+        <p>Connect your ClearPay account with Stripe so clients can pay an invoice on the spot — funds land straight in your account, no middleman to chase.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="steps" id="process">
+  <div class="wrap">
+    <div class="scene-head reveal">
+      <span class="eyebrow">Start to finish</span>
+      <h2>Send the invoice. Get the payment. Move on.</h2>
+    </div>
+    <div class="step-row">
+      <div class="step reveal">
+        <div class="snum">First</div>
+        <h3>Create the invoice</h3>
+        <p>Pick the client, add what was done and for how much, and decide whether tax or a card fee applies.</p>
+      </div>
+      <div class="step reveal">
+        <div class="snum">Then</div>
+        <h3>Send it their way</h3>
+        <p>Once it's saved, send it to their inbox straight from ClearPay. They see exactly what's owed and why — no line item left unexplained.</p>
+      </div>
+      <div class="step reveal">
+        <div class="snum">Finally</div>
+        <h3>Watch it get marked paid</h3>
+        <p>Payments come in through Stripe or get logged by hand, and your outstanding balance updates on its own.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="security" id="security">
+  <div class="wrap">
+    <div class="security-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2L4 5.5V11C4 16 7.4 20.4 12 22C16.6 20.4 20 16 20 11V5.5L12 2Z" stroke="#fff" stroke-width="1.8"/><path d="M9 12L11 14L15.5 9.5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div>
+      <h3>Payments run through Stripe</h3>
+      <p>Card details never touch our servers — Stripe handles processing and PCI compliance, so client payments stay secure end to end.</p>
+    </div>
+  </div>
+</section>
+
+<section class="cta" id="get-started">
+  <div class="wrap cta-inner">
+    <h2>Ready to see your books clearly?</h2>
+    <p>Riska's Finance clients get ClearPay built into their engagement. Ask your Accountant to set up your account.</p>
+    <div class="cta-actions">
+      <a href="mailto:admin@riskasfinance.com" class="btn btn-on-dark">Talk to Riska's Finance</a>
+     <a href="https://www.riskasfinance.com" class="btn btn-ghost-dark" target="_blank" rel="noopener noreferrer">Visit riskasfinance.com</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="brand-name">Clear<span style="color:var(--emerald)">Pay</span></div>
+        <p>Invoicing, quotes, and reporting built by Riska's Finance, LLC — an Accounting and Tax firm based in Dixon, Illinois.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Product</h4>
+        <a href="#features">Features</a>
+        <a href="#clarity">How it works</a>
+        <a href="#security">Security</a>
+      </div>
+      <div class="foot-col">
+        <h4>Company</h4>
+        <a href="https://www.riskasfinance.com">Riska's Finance</a>
+        <a href="mailto:admin@riskasfinance.com">Contact</a>
+      </div>
+      <div class="foot-col">
+        <h4>Firm</h4>
+        <a href="#">614 Crawford Ave</a>
+        <a href="#">Dixon, IL 61021</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Riska's Finance, LLC. All rights reserved.</span>
+      <span>Built for the businesses we do the books for.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const revealEls = document.querySelectorAll('.reveal, .scene');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+  revealEls.forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
